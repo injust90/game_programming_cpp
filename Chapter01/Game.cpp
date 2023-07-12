@@ -1,13 +1,3 @@
-// testing changes to git
-
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
-
 #include "Game.h"
 
 const int thickness = 15;
@@ -62,12 +52,12 @@ bool Game::Initialize()
 		return false;
 	}
 	//
-	mPaddlePos.x = 10.0f;
+	mPaddlePos.x = 20.0f;
 	mPaddlePos.y = 768.0f/2.0f;
 	mBallPos.x = 1024.0f/2.0f;
 	mBallPos.y = 768.0f/2.0f;
-	mBallVel.x = -200.0f;
-	mBallVel.y = 235.0f;
+	mBallVel.x = 0.0f;
+	mBallVel.y = 0.0f;
 	return true;
 }
 
@@ -146,7 +136,7 @@ void Game::UpdateGame()
 		else if (mPaddlePos.y > (768.0f - paddleH/2.0f - thickness))
 		{
 			mPaddlePos.y = 768.0f - paddleH/2.0f - thickness;
-		}
+		} 
 	}
 	
 	// Update ball position based on ball velocity
@@ -224,6 +214,13 @@ void Game::GenerateOutput()
 	
 	// Draw right wall
 	wall.x = 1024 - thickness;
+	wall.y = 0;
+	wall.w = thickness;
+	wall.h = 1024;
+	SDL_RenderFillRect(mRenderer, &wall);
+
+	// Draw left wall
+	wall.x = 0;
 	wall.y = 0;
 	wall.w = thickness;
 	wall.h = 1024;
