@@ -173,6 +173,14 @@ void Game::UpdateGame()
 	{
 		mIsRunning = false;
 	}
+	
+	// Did the ball collide with the LEFT wall?
+	else if (mBallPos.x <= (0 + thickness) && mBallVel.x < 0.0f)
+	{
+		SDL_Log("Left wall");
+		mBallVel.x *= -1.0f;
+	}
+
 	// Did the ball collide with the right wall?
 	else if (mBallPos.x >= (1024.0f - thickness) && mBallVel.x > 0.0f)
 	{
@@ -222,6 +230,13 @@ void Game::GenerateOutput()
 	wall.y = 768 - thickness;
 	SDL_RenderFillRect(mRenderer, &wall);
 	
+	// Draw LEFT wall
+	wall.x = 0;
+	wall.y = 0;
+	wall.w = thickness;
+	wall.h = 1024;
+	SDL_RenderFillRect(mRenderer, &wall);
+
 	// Draw right wall
 	wall.x = 1024 - thickness;
 	wall.y = 0;
