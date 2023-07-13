@@ -62,9 +62,9 @@ bool Game::Initialize()
 		return false;
 	}
 	//
-	mPaddlePos.x = 10.0f;
+	mPaddlePos.x = 1024.0f / 2.0f;
 	mPaddlePos.y = 768.0f/2.0f;
-	mBallPos.x = 1024.0f/2.0f;
+	mBallPos.x = 100.0f/2.0f;
 	mBallPos.y = 768.0f/2.0f;
 	mBallVel.x = -200.0f;
 	mBallVel.y = 235.0f;
