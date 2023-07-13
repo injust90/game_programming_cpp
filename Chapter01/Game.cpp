@@ -184,6 +184,7 @@ void Game::UpdateGame()
 	// Did the ball collide with the right wall?
 	else if (mBallPos.x >= (1024.0f - thickness) && mBallVel.x > 0.0f)
 	{
+		SDL_Log("Right wall");
 		mBallVel.x *= -1.0f;
 	}
 	
