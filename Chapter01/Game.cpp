@@ -1,3 +1,13 @@
+// testing the change to reset
+
+// ----------------------------------------------------------------
+// From Game Programming in C++ by Sanjay Madhav
+// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
+// 
+// Released under the BSD License
+// See LICENSE in root directory for full details.
+// ----------------------------------------------------------------
+
 #include "Game.h"
 
 const int thickness = 15;
@@ -52,12 +62,12 @@ bool Game::Initialize()
 		return false;
 	}
 	//
-	mPaddlePos.x = 20.0f;
+	mPaddlePos.x = 1024.0f / 2.0f;
 	mPaddlePos.y = 768.0f/2.0f;
-	mBallPos.x = 1024.0f/2.0f;
+	mBallPos.x = 100.0f/2.0f;
 	mBallPos.y = 768.0f/2.0f;
-	mBallVel.x = 200.0f;
-	mBallVel.y = 100.0f;
+	mBallVel.x = -200.0f;
+	mBallVel.y = 235.0f;
 	return true;
 }
 
@@ -79,12 +89,12 @@ void Game::ProcessInput()
 		switch (event.type)
 		{
 			// If we get an SDL_QUIT event, end loop
-		case SDL_QUIT:
-			mIsRunning = false;
-			break;
+			case SDL_QUIT:
+				mIsRunning = false;
+				break;
 		}
 	}
-
+	
 	// Get state of keyboard
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	// If escape is pressed, also end loop
@@ -92,7 +102,7 @@ void Game::ProcessInput()
 	{
 		mIsRunning = false;
 	}
-
+	
 	// Update paddle direction based on W/S keys
 	mPaddleDir = 0;
 	if (state[SDL_SCANCODE_W])
@@ -114,7 +124,7 @@ void Game::UpdateGame()
 	// Delta time is the difference in ticks from last frame
 	// (converted to seconds)
 	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
-
+	
 	// Clamp maximum delta time value
 	if (deltaTime > 0.05f)
 	{
@@ -123,26 +133,26 @@ void Game::UpdateGame()
 
 	// Update tick counts (for next frame)
 	mTicksCount = SDL_GetTicks();
-
+	
 	// Update paddle position based on direction
 	if (mPaddleDir != 0)
 	{
 		mPaddlePos.y += mPaddleDir * 300.0f * deltaTime;
 		// Make sure paddle doesn't move off screen!
-		if (mPaddlePos.y < (paddleH / 2.0f + thickness))
+		if (mPaddlePos.y < (paddleH/2.0f + thickness))
 		{
-			mPaddlePos.y = paddleH / 2.0f + thickness;
+			mPaddlePos.y = paddleH/2.0f + thickness;
 		}
-		else if (mPaddlePos.y > (768.0f - paddleH / 2.0f - thickness))
+		else if (mPaddlePos.y > (768.0f - paddleH/2.0f - thickness))
 		{
-			mPaddlePos.y = 768.0f - paddleH / 2.0f - thickness;
+			mPaddlePos.y = 768.0f - paddleH/2.0f - thickness;
 		}
 	}
-
+	
 	// Update ball position based on ball velocity
 	mBallPos.x += mBallVel.x * deltaTime;
 	mBallPos.y += mBallVel.y * deltaTime;
-
+	
 	// Bounce if needed
 	// Did we intersect with the paddle?
 	float diff = mPaddlePos.y - mBallPos.y;
@@ -159,22 +169,23 @@ void Game::UpdateGame()
 		mBallVel.x *= -1.0f;
 	}
 	// Did the ball go off the screen? (if so, end game)
-	//else if (mBallPos.x <= 0.0f)
-	//{
-	//	mIsRunning = false;
-	//}
-
+	else if (mBallPos.x <= 0.0f)
+	{
+		mIsRunning = false;
+	}
+	
 	// Did the ball collide with the LEFT wall?
 	else if (mBallPos.x <= (0 + thickness) && mBallVel.x < 0.0f)
 	{
 		SDL_Log("Left wall");
 		mBallVel.x *= -1.0f;
 	}
+
 	// Did the ball collide with the right wall?
 	else if (mBallPos.x >= (1024.0f - thickness) && mBallVel.x > 0.0f)
 	{
-		mBallVel.x *= -1.0f;
 		SDL_Log("Right wall");
+		mBallVel.x *= -1.0f;
 	}
 	
 	// Did the ball collide with the top wall?
@@ -220,15 +231,15 @@ void Game::GenerateOutput()
 	wall.y = 768 - thickness;
 	SDL_RenderFillRect(mRenderer, &wall);
 	
-	// Draw right wall
-	wall.x = 1024 - thickness;
+	// Draw LEFT wall
+	wall.x = 0;
 	wall.y = 0;
 	wall.w = thickness;
 	wall.h = 1024;
 	SDL_RenderFillRect(mRenderer, &wall);
 
-	// Draw left wall
-	wall.x = 0 ;
+	// Draw right wall
+	wall.x = 1024 - thickness;
 	wall.y = 0;
 	wall.w = thickness;
 	wall.h = 1024;
