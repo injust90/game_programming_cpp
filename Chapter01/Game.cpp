@@ -36,7 +36,7 @@ bool Game::Initialize()
 	// Create an SDL Window
 	mWindow = SDL_CreateWindow(
 		"Game Programming in C++ (Chapter 1)", // Window title
-		100,	// Top left x-coordinate of window
+		500,	// Top left x-coordinate of window
 		100,	// Top left y-coordinate of window
 		1024,	// Width of window
 		768,	// Height of window
@@ -105,11 +105,11 @@ void Game::ProcessInput()
 	
 	// Update paddle direction based on W/S keys
 	mPaddleDir = 0;
-	if (state[SDL_SCANCODE_W])
+	if (state[SDL_SCANCODE_A])
 	{
 		mPaddleDir -= 1;
 	}
-	if (state[SDL_SCANCODE_S])
+	if (state[SDL_SCANCODE_D])
 	{
 		mPaddleDir += 1;
 	}
@@ -118,7 +118,7 @@ void Game::ProcessInput()
 void Game::UpdateGame()
 {
 	// Wait until 16ms has elapsed since last frame
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 0))
 		;
 
 	// Delta time is the difference in ticks from last frame
@@ -137,7 +137,7 @@ void Game::UpdateGame()
 	// Update paddle position based on direction
 	if (mPaddleDir != 0)
 	{
-		mPaddlePos.y += mPaddleDir * 300.0f * deltaTime;
+		mPaddlePos.x += mPaddleDir * 300.0f * deltaTime;
 		// Make sure paddle doesn't move off screen!
 		if (mPaddlePos.y < (paddleH/2.0f + thickness))
 		{
@@ -147,6 +147,7 @@ void Game::UpdateGame()
 		{
 			mPaddlePos.y = 768.0f - paddleH/2.0f - thickness;
 		}
+		// TODO: Make sure paddle doesn't move off screen to left or right
 	}
 	
 	// Update ball position based on ball velocity
@@ -252,6 +253,8 @@ void Game::GenerateOutput()
 		thickness,
 		static_cast<int>(paddleH)
 	};
+
+	
 	SDL_RenderFillRect(mRenderer, &paddle);
 	
 	// Draw ball
